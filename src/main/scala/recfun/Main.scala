@@ -16,6 +16,12 @@ object Main {
     def pascal(c: Int, r: Int): Int = {
 
       def buildRows(rows : List[List[Int]]): List[List[Int]] = {
+
+        def atTargetCell(lastRowBuilt: List[Int])= {
+          def lengthOfLastRowBuilt = lastRowBuilt.length
+          rows.length - 1 == r && lengthOfLastRowBuilt - 1 == c
+        }
+
         // build row
         def buildRow(prevRow: List[Int], curRow: List[Int], curCol: Int): List[Int] = {
 
@@ -26,15 +32,23 @@ object Main {
             }
           }
 
-            if ((rows.length == r && curCol == c) || (curRow.length == prevRow.length + 1)) curRow
+            // its rows.length because rows does not include the row being built
+            if ((rows.length == r && curRow.length - 1 == c) || (curRow.length == rows.head.length + 1)) curRow
             else
-              buildRow(prevRow.tail, buildNextCell(List(prevRow.head, prevRow.tail.head)) :: curRow, curCol + 1)
+              // there are two cases here
+            prevRow match {
+              case x :: Nil =>
+                buildRow(prevRow, buildNextCell(prevRow) :: curRow, curCol + 1)
+              case x :: xs =>
+                if (curRow.length < 1)
+                  buildRow(prevRow, buildNextCell(List(prevRow.head)) :: curRow, curCol + 1)
+                else
+                  buildRow(prevRow.tail, buildNextCell(List(prevRow.head, prevRow.tail.head)) :: curRow, curCol + 1)
+            }
           }
 
-        rows match {
-          case rows.length == r => rows
-          case _ => buildRows(buildRow(rows.head, List(), 0) :: rows)
-        }
+          if (rows.length - 1 == r && rows.head.length - 1 == c) rows
+          else buildRows(buildRow(rows.head, List(), 0) :: rows)
       }
 
       def triangleUntilCellDesired = buildRows(List(List(1)))
