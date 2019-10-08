@@ -80,6 +80,7 @@ object Main {
    */
   def countChange(money: Int, coins: List[Int]): Int = {
 // TODO sort the coins first
+    // TODO: We do not need the ways argument anymore
     def helper(sum: Int, ways: Int, denoms: List[Int]):Int = {
 
       if (sum == 0) ways else if (denoms.isEmpty) ways
