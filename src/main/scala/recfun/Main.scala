@@ -78,5 +78,21 @@ object Main {
   /**
    * Exercise 3
    */
-  def countChange(money: Int, coins: List[Int]): Int = ???
+  def countChange(money: Int, coins: List[Int]): Int = {
+// TODO sort the coins first
+    def helper(sum: Int, ways: Int, denoms: List[Int]):Int = {
+
+      if (sum == 0) ways else if (denoms.isEmpty) ways
+      else {
+        if (denoms.head == sum)
+          ways + 1
+        else if (denoms.head > sum)
+          ways
+        else {
+          helper(sum - denoms.head, 0, denoms) + helper(sum, 0, denoms.tail)
+        }
+      }
+    }
+      helper(money, 0, coins.sorted)
+  }
 }
